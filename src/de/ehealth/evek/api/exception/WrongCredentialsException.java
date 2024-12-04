@@ -20,4 +20,8 @@ public class WrongCredentialsException extends Exception {
 		return cause;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("Username and password not matching!");
+	}
 }

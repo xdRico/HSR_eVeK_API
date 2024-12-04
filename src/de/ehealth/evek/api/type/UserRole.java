@@ -1,5 +1,6 @@
 package de.ehealth.evek.api.type;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
-public enum UserRole {
+public enum UserRole implements Serializable {
 	HealthcareAdmin(new Object[] {
 			Address.Update.class,
 			ServiceProvider.CreateFull.class,
@@ -130,6 +131,9 @@ public enum UserRole {
 			User.Delete.class,
 			User.UpdateRole.class
 	});
+	
+	private static final long serialVersionUID = -6591375785628765586L;
+
 	
 	private List<Object> allowedCommands = new ArrayList<>();
 	
