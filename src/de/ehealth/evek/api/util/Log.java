@@ -151,11 +151,16 @@ public class Log {
 	 * 
 	 * @return String - the formatted Log Prefix
 	 */
+	@SuppressWarnings("deprecation")
 	public static String logPrefix() {
 
 		LocalDateTime time = LocalDateTime.now();
-
+		String version = System.getProperty("java.version");
+		if(version != null 
+				&& Integer.parseInt(version.replace('.', 'x').split("x")[0]) <= 19)
+			return "[" + time + "][" + Thread.currentThread().getName() + " #" + Thread.currentThread().getId() + "] ";
 		return "[" + time + "][" + Thread.currentThread().getName() + " #" + Thread.currentThread().threadId() + "] ";
+
 	}
 
 }
