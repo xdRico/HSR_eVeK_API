@@ -8,12 +8,15 @@ import de.ehealth.evek.api.entity.ServiceProvider;
 import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
+import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.exception.UserNotProvidedException;
+import de.ehealth.evek.api.network.ComEncryptionKey;
 import de.ehealth.evek.api.util.Log;
 
-public interface IComServerReceiver {
+public interface IComServerReceiver extends IComEncryption {
 
 	default boolean receiveObject(Object inputObject) throws Throwable {
+		inputObject = handleInputEncryption(inputObject);
 		if(customHandleInput(inputObject))
 			return true;
 		
@@ -21,6 +24,10 @@ public interface IComServerReceiver {
 			return setProcessingUser((User.LoginUser) inputObject);
 		if(inputObject instanceof User.CreateFull) {
 			process((User.CreateFull) inputObject);
+			return true;
+		}
+		if(inputObject instanceof ComEncryptionKey) {
+			process((ComEncryptionKey) inputObject);
 			return true;
 		}
 		
@@ -56,6 +63,8 @@ public interface IComServerReceiver {
 	
 	boolean hasProcessingUser();
 	
+	Object handleInputEncryption(Object inputObject) throws EncryptionException;
+	
 	default boolean customHandleInput(Object inputObject) {
 		Log.sendMessage(String.format("	Object of Type %s has been recieved!", inputObject.getClass()));
 		return false;
@@ -71,6 +80,6 @@ public interface IComServerReceiver {
 	void process(TransportDetails.Command cmd) throws Throwable;
 	void process(TransportDocument.Command cmd) throws Throwable;
 	void process(User.Command cmd) throws Throwable;
-
+	void process(ComEncryptionKey key) throws Throwable;
 	
 }

@@ -10,8 +10,9 @@ import de.ehealth.evek.api.entity.ServiceProvider;
 import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
+import de.ehealth.evek.api.network.ComEncryptionKey;
 
-public interface IComClientReceiver {
+public interface IComClientReceiver extends IComEncryption {
 	
 	public Address receiveAddress() throws Exception;
 	
@@ -37,4 +38,6 @@ public interface IComClientReceiver {
 	
 	public List<?> receiveList() throws Exception;
 	
+	public ComEncryptionKey receivePublicKey() throws Exception ;
+
 }

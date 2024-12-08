@@ -11,29 +11,54 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
-public interface IComClientSender extends IComSender {
-
-	void sendAddress(Address.Command cmd) throws IOException;
+public interface IComClientSender extends IComSender, IComEncryption {
 	
-	void sendInsurance(Insurance.Command cmd) throws IOException;
+	default void sendAddress(Address.Command cmd) throws IOException {
+		sendAsObject(cmd); 
+	}
 	
-	void sendInsuranceData(InsuranceData.Command cmd) throws IOException;
+	default void sendInsurance(Insurance.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
 	
-//	void sendInvoice(Invoice.Command cmd) throws IOException;
+	default void sendInsuranceData(InsuranceData.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
 	
-	void sendPatient(Patient.Command cmd) throws IOException;
+//	default void sendInvoice(Invoice.Command cmd) throws IOException {
+//		sendAsObject(cmd);
+//	}
 	
-//	void sendProtocol(Protocol.Command cmd) throws IOException;
+	default void sendPatient(Patient.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
 	
-	void sendServiceProvider(ServiceProvider.Command cmd) throws IOException;
+//	default void sendProtocol(Protocol.Command cmd) throws IOException {
+//		sendAsObject(cmd);
+//	}
 	
-	void sendTransportDetails(TransportDetails.Command cmd) throws IOException;
+	default void sendServiceProvider(ServiceProvider.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
 	
-	void sendTransportDocument(TransportDocument.Command cmd) throws IOException;
+	default void sendTransportDetails(TransportDetails.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
 	
-	void sendUser(User.Command cmd) throws IOException;
-
+	default void sendTransportDocument(TransportDocument.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
+	
+	default void sendUser(User.Command cmd) throws IOException {
+		sendAsObject(cmd);
+	}
+	
+	default void sendPCUser(User.LoginUser loginUser) throws IOException {
+		sendAsObject(loginUser);
+	}
+	
 	default void loginUser(String username, String password) throws IOException {
 		sendUser(new User.LoginUser(username, password));
 	}
+	
 }

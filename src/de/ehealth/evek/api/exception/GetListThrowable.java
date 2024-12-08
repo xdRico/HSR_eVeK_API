@@ -1,5 +1,6 @@
 package de.ehealth.evek.api.exception;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetListThrowable extends Throwable {
@@ -19,4 +20,8 @@ public class GetListThrowable extends Throwable {
 		return list;
 	}
 
+	public ArrayList<?> getArrayList(){
+		return new ArrayList<>(list);
+	}
+	
 }
