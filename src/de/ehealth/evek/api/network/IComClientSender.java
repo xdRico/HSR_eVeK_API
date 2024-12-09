@@ -1,4 +1,4 @@
-package de.ehealth.evek.api.network.interfaces;
+package de.ehealth.evek.api.network;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
-public interface IComClientSender extends IComSender, IComEncryption {
+public interface IComClientSender extends IComSender {
 	
 	default void sendAddress(Address.Command cmd) throws IOException {
 		sendAsObject(cmd); 

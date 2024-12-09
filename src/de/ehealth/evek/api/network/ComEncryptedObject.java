@@ -21,7 +21,7 @@ public class ComEncryptedObject implements Serializable {
 	private final SealedObject sealedObject;
 	private final String aesKey;
 	
-	public ComEncryptedObject(Cipher rsaEncryptionCipher, Serializable object) throws EncryptionException {
+	ComEncryptedObject(Cipher rsaEncryptionCipher, Serializable object) throws EncryptionException {
 		try {
 			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 			keyGen.init(256); // 256-Bit AES
@@ -44,7 +44,7 @@ public class ComEncryptedObject implements Serializable {
 
 	}
 	
-	public Object decryptObject(Cipher rsaDecryptionCipher) throws EncryptionException {
+	Serializable decryptObject(Cipher rsaDecryptionCipher) throws EncryptionException {
 
 		if(rsaDecryptionCipher == null)
 			throw new EncryptionException(sealedObject, "No valid Cipher!");
@@ -60,7 +60,7 @@ public class ComEncryptedObject implements Serializable {
 	        // 2. Entschlüssele die Daten mit AES
 	        Cipher aesCipher = Cipher.getInstance("AES");
 	        aesCipher.init(Cipher.DECRYPT_MODE, aesKey);
-			return sealedObject.getObject(aesCipher);
+			return (Serializable) sealedObject.getObject(aesCipher);
 		} catch (Exception e) {
 			Log.sendException(e);
 			Log.sendMessage("Object could not be decrypted!");

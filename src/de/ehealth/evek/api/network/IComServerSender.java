@@ -1,4 +1,4 @@
-package de.ehealth.evek.api.network.interfaces;
+package de.ehealth.evek.api.network;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
-public interface IComServerSender extends IComSender, IComEncryption {
+public interface IComServerSender extends IComSender {
 	
 	
 	void send(Address cmd) throws IOException;

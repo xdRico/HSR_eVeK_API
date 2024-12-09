@@ -1,4 +1,4 @@
-package de.ehealth.evek.api.network.interfaces;
+package de.ehealth.evek.api.network;
 
 import java.util.List;
 
@@ -10,9 +10,8 @@ import de.ehealth.evek.api.entity.ServiceProvider;
 import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
-import de.ehealth.evek.api.network.ComEncryptionKey;
 
-public interface IComClientReceiver extends IComEncryption {
+public interface IComClientReceiver extends IComReceiver{
 	
 	public Address receiveAddress() throws Exception;
 	

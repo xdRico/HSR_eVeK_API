@@ -1,4 +1,6 @@
-package de.ehealth.evek.api.network.interfaces;
+package de.ehealth.evek.api.network;
+
+import java.io.Serializable;
 
 import de.ehealth.evek.api.entity.Address;
 import de.ehealth.evek.api.entity.Insurance;
@@ -10,13 +12,21 @@ import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.exception.UserNotProvidedException;
-import de.ehealth.evek.api.network.ComEncryptionKey;
 import de.ehealth.evek.api.util.Log;
 
-public interface IComServerReceiver extends IComEncryption {
+public interface IComServerReceiver extends IComReceiver {
 
-	default boolean receiveObject(Object inputObject) throws Throwable {
+	default boolean receiveObject(Object input) throws Throwable {
+		if(!(input instanceof Serializable))
+			throw new IllegalArgumentException("Object is not a serializable!");
+		Serializable inputObject = (Serializable) input;
 		inputObject = handleInputEncryption(inputObject);
+		
+		if(inputObject instanceof ComEncryptionKey) {
+			process((ComEncryptionKey) inputObject);
+			return true;
+		}
+		
 		if(customHandleInput(inputObject))
 			return true;
 		
@@ -24,10 +34,6 @@ public interface IComServerReceiver extends IComEncryption {
 			return setProcessingUser((User.LoginUser) inputObject);
 		if(inputObject instanceof User.CreateFull) {
 			process((User.CreateFull) inputObject);
-			return true;
-		}
-		if(inputObject instanceof ComEncryptionKey) {
-			process((ComEncryptionKey) inputObject);
 			return true;
 		}
 		
@@ -63,9 +69,9 @@ public interface IComServerReceiver extends IComEncryption {
 	
 	boolean hasProcessingUser();
 	
-	Object handleInputEncryption(Object inputObject) throws EncryptionException;
+	Serializable handleInputEncryption(Serializable inputObject) throws EncryptionException;
 	
-	default boolean customHandleInput(Object inputObject) {
+	default boolean customHandleInput(Serializable inputObject) {
 		Log.sendMessage(String.format("	Object of Type %s has been recieved!", inputObject.getClass()));
 		return false;
 	}

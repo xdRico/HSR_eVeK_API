@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Type;
 import java.net.Socket;
-import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -20,14 +18,10 @@ import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.exception.WrongObjectTypeException;
-import de.ehealth.evek.api.network.interfaces.IComClientReceiver;
-import de.ehealth.evek.api.network.interfaces.IComEncryption;
-import de.ehealth.evek.api.util.Log;
 
 public class ComClientReceiver implements IComClientReceiver{
 
 	private final ObjectInputStream objReader;
-	private PrivateKey privateKey;
 	private Cipher decryptionCipher;
 	
 	public ComClientReceiver(Socket server) throws IOException {
@@ -155,20 +149,5 @@ public class ComClientReceiver implements IComClientReceiver{
 		if(object instanceof ComEncryptionKey) 
 			return (ComEncryptionKey) object;
 		throw wrongObjectType(ComEncryptionKey.class, object);
-	}
-	
-	@Override
-	public KeyPair useEncryption() throws EncryptionException {
-		try {
-			Log.sendMessage("Setting up encryption...");
-			KeyPair keys = useEncryption("RSA");
-			this.privateKey = keys.getPrivate();
-			decryptionCipher = Cipher.getInstance(IComEncryption.defaultCipherRSAInstance());
-			decryptionCipher.init(Cipher.DECRYPT_MODE, privateKey, IComEncryption.defaultOAEPParams());
-			Log.sendMessage("	Encryption for Client-Server-communication has been successfully set up!");
-	 		return keys;
-		}catch(Exception e) {
-			throw new EncryptionException(e);
-		}
 	}
 }
