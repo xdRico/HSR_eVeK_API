@@ -14,5 +14,5 @@ interface IComSender {
 
 	}
 	
-	ComEncryption useEncryption(IComReceiver receiver, IComSender sender) throws EncryptionException;
+	ComEncryption useEncryption(IComReceiver receiver) throws EncryptionException;
 }

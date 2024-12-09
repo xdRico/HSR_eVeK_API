@@ -43,8 +43,8 @@ public class ComSender implements IComSender {
 
 	@SuppressWarnings("exports")
 	@Override
-	public ComEncryption useEncryption(IComReceiver receiver, IComSender sender) throws EncryptionException {
-		this.encryption = new ComEncryption(receiver, sender);
+	public ComEncryption useEncryption(IComReceiver receiver) throws EncryptionException {
+		this.encryption = new ComEncryption(receiver, this);
 		this.encryption.useEncryption();
 		return encryption;
 	}
