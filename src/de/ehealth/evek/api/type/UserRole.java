@@ -28,6 +28,7 @@ public enum UserRole implements Serializable {
 			Insurance.Update.class,
 			Insurance.Move.class,
 			InsuranceData.Create.class,
+			TransportDetails.Create.class,
 			TransportDocument.AssignPatient.class,
 			TransportDocument.Create.class,
 			TransportDocument.Delete.class,
@@ -38,6 +39,7 @@ public enum UserRole implements Serializable {
 			Insurance.Update.class,
 			Insurance.Move.class,
 			InsuranceData.Create.class,
+			TransportDetails.Create.class,
 			TransportDocument.AssignPatient.class,
 			TransportDocument.Create.class,
 			TransportDocument.Delete.class,
@@ -56,6 +58,7 @@ public enum UserRole implements Serializable {
 			Insurance.Update.class,
 			Insurance.Move.class,
 			InsuranceData.Create.class,
+			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Create.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,
@@ -67,14 +70,14 @@ public enum UserRole implements Serializable {
 			TransportDocument.Update.class
 	}),
 	TransportInvoice(new Object[] {
-			TransportDetails.Create.class,
+			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,
 			TransportDetails.UpdatePatientSignature.class,
 			TransportDetails.UpdateTransporterSignature.class
 	}),
 	TransportUser(new Object[] {
-			TransportDetails.Create.class,
+			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,
 			TransportDetails.UpdatePatientSignature.class,
@@ -117,6 +120,7 @@ public enum UserRole implements Serializable {
 			ServiceProvider.Delete.class,
 			ServiceProvider.Update.class,
 			ServiceProvider.UpdateService.class,
+			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Create.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,

@@ -18,7 +18,7 @@ public record TransportDetails (
 		COptional<Reference<Address>> endAddress,
 		COptional<Direction> direction,
 		COptional<PatientCondition> patientCondition,
-		Reference<ServiceProvider> transportProvider,
+		COptional<Reference<ServiceProvider>> transportProvider,
 		COptional<String> tourNumber,
 		COptional<Boolean> paymentExemption,
 		COptional<String> patientSignature,
@@ -29,13 +29,19 @@ public record TransportDetails (
 	
     private static final long serialVersionUID = 6359875465658792642L;
 
-	public static sealed interface Command extends Serializable permits Create, Delete, Update, UpdatePatientSignature, UpdateTransporterSignature, Get, GetList{
+	public static sealed interface Command extends Serializable permits AssignTransportProvider, Create, Delete, Update, UpdatePatientSignature, UpdateTransporterSignature, Get, GetList{
+	}
+	
+	public static record AssignTransportProvider(
+			Id<TransportDetails> id,
+			Reference<ServiceProvider> transportProvider
+			) implements Command{
+		
 	}
 
 	public static record Create( 
 			Reference<TransportDocument> transportDocument, 
-			Date transportDate, 
-			Reference<ServiceProvider> transportProvider
+			Date transportDate
 			) implements Command {
 	}
 
@@ -144,6 +150,24 @@ public record TransportDetails (
 				this.patientSignatureDate,
 				COptional.of(newTransporterSignature),
 				COptional.of(newTransporterSignatureDate));
+	}
+	public TransportDetails updateTransportProvider(
+			Reference<ServiceProvider> newTransportProvider){
+		return new TransportDetails(
+				this.id, 
+				this.transportDocument,
+				this.transportDate,
+				this.startAddress, 
+				this.endAddress, 
+				this.direction, 
+				this.patientCondition,
+				COptional.of(newTransportProvider),
+				this.tourNumber,
+				this.paymentExemption, 
+				this.patientSignature, 
+				this.patientSignatureDate,
+				this.transporterSignature,
+				this.transporterSignatureDate);
 	}
 	
 	public String toString() {
