@@ -3,6 +3,9 @@ package de.ehealth.evek.api.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.Reference;
 import de.ehealth.evek.api.util.COptional;
@@ -41,7 +44,8 @@ public record Address(
 	}
 
 	public static interface Operations {
-		Address process(Command cmd, Reference<User> processingUser) throws Throwable;
+		Address process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;
 
 		List<Address> getAddress(Filter filter);
 

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.Reference;
 import de.ehealth.evek.api.util.COptional;
@@ -17,7 +20,7 @@ public record Patient (
 		Reference<Address> address
 		) implements Serializable {
 
-    private static final long serialVersionUID = -6497523187564893515L;
+    private static final long serialVersionUID = -6734982562356986824L;
 
 	
 	public static sealed interface Command extends Serializable permits Create, 
@@ -77,8 +80,9 @@ public record Patient (
 	}
 
 	public static interface Operations {
-		Patient process(Command cmd, Reference<User> processingUser) throws Throwable;
-
+		Patient process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;
+		
 		List<Patient> getPatient(Filter filter);
 
 		Patient getPatient(Id<Patient> insuranceNumber);

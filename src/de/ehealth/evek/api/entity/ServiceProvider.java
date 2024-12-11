@@ -3,6 +3,9 @@ package de.ehealth.evek.api.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.Reference;
 import de.ehealth.evek.api.util.COptional;
@@ -56,8 +59,9 @@ public record ServiceProvider(
 	}
 
 	public static interface Operations {
-		ServiceProvider process(Command cmd, Reference<User> processingUser) throws Throwable;
-
+		ServiceProvider process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;
+		
 		List<ServiceProvider> getServiceProvider(Filter filter);
 
 		ServiceProvider getServiceProvider(Id<ServiceProvider> id);

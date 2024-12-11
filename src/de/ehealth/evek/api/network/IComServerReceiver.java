@@ -11,12 +11,16 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.exception.EncryptionException;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
+import de.ehealth.evek.api.exception.UserNotAllowedException;
 import de.ehealth.evek.api.exception.UserNotProvidedException;
 import de.ehealth.evek.api.util.Log;
 
 public interface IComServerReceiver extends IComReceiver {
 
-	default boolean receiveObject(Object input) throws Throwable {
+	default boolean receiveObject(Object input) 
+			throws EncryptionException, IllegalProcessException, ProcessingException, Exception {
 		if(!(input instanceof Serializable))
 			throw new IllegalArgumentException("Object is not a serializable!");
 		Serializable inputObject = (Serializable) input;
@@ -27,8 +31,13 @@ public interface IComServerReceiver extends IComReceiver {
 			return true;
 		}
 		
-		if(customHandleInput(inputObject))
-			return true;
+		try {
+			if(customHandleInput(inputObject))
+				return true;
+		} catch (Exception e) {
+			Log.sendException(e);
+			throw new IllegalProcessException(e);
+		}
 		
 		if(inputObject instanceof User.LoginUser) 
 			return setProcessingUser((User.LoginUser) inputObject);
@@ -38,7 +47,7 @@ public interface IComServerReceiver extends IComReceiver {
 		}
 		
 		if(!hasProcessingUser())
-			throw new UserNotProvidedException();
+			throw new IllegalProcessException(new UserNotProvidedException());
 		
 		if(inputObject instanceof Address.Command)
 			process((Address.Command) inputObject);
@@ -71,21 +80,34 @@ public interface IComServerReceiver extends IComReceiver {
 	
 	Serializable handleInputEncryption(Serializable inputObject) throws EncryptionException;
 	
-	default boolean customHandleInput(Serializable inputObject) {
+	default boolean customHandleInput(Serializable inputObject) 
+			throws UserNotProvidedException, UserNotAllowedException, IllegalArgumentException {
 		Log.sendMessage(String.format("	Object of Type %s has been recieved!", inputObject.getClass()));
 		return false;
 	}
 	
-	void process(Address.Command cmd) throws Throwable;
-	void process(Insurance.Command cmd) throws Throwable;
-	void process(InsuranceData.Command cmd) throws Throwable;
-//	void process(Invoice.Command cmd) throws Throwable;
-	void process(Patient.Command cmd) throws Throwable;
-//	void process(Protocol.Command cmd) throws Throwable;
-	void process(ServiceProvider.Command cmd) throws Throwable;
-	void process(TransportDetails.Command cmd) throws Throwable;
-	void process(TransportDocument.Command cmd) throws Throwable;
-	void process(User.Command cmd) throws Throwable;
-	void process(ComEncryptionKey key) throws Throwable;
+	void process(Address.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	void process(Insurance.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	void process(InsuranceData.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+//	void process(Invoice.Command cmd) 
+//			throws IllegalProcessException, ProcessingException, Exception;
+	void process(Patient.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+//	void process(Protocol.Command cmd) 
+//			throws IllegalProcessException, ProcessingException, Exception;
+	void process(ServiceProvider.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	void process(TransportDetails.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	void process(TransportDocument.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	void process(User.Command cmd) 
+			throws IllegalProcessException, ProcessingException, Exception;
+	
+	void process(ComEncryptionKey key) 
+			throws EncryptionException;
 	
 }

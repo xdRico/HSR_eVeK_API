@@ -4,7 +4,7 @@ import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.UserRole;
 
-public class UserNotAllowedException extends Exception {
+public class UserNotAllowedException extends IllegalAccessException  {
 
 	/**
 	 * 

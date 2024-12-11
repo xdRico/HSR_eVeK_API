@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Direction;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.PatientCondition;
@@ -81,8 +84,9 @@ public record TransportDetails (
 	}
 
 	public static interface Operations {
-		TransportDetails process(Command cmd, Reference<User> processingUser) throws Throwable;
-
+		TransportDetails process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;
+		
 		List<TransportDetails> getTransportDetails(Filter filter);
 
 		TransportDetails getTransportDetails(Id<TransportDetails> id);
