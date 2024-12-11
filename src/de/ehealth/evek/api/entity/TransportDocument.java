@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
 import de.ehealth.evek.api.exception.IsNotArchivableException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.Reference;
 import de.ehealth.evek.api.type.TransportReason;
@@ -82,8 +85,9 @@ public record TransportDocument(
 	}
 	
 	public static interface Operations {
-		TransportDocument process(Command cmd, Reference<User> processingUser) throws Throwable;
-
+		TransportDocument process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;
+		
 		List<TransportDocument> getTransportDocument(Filter filter);
 
 		TransportDocument getTransportDocument(Id<TransportDocument> id);

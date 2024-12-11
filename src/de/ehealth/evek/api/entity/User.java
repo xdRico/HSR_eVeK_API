@@ -3,6 +3,9 @@ package de.ehealth.evek.api.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import de.ehealth.evek.api.exception.GetListThrowable;
+import de.ehealth.evek.api.exception.IllegalProcessException;
+import de.ehealth.evek.api.exception.ProcessingException;
 import de.ehealth.evek.api.type.Id;
 import de.ehealth.evek.api.type.Reference;
 import de.ehealth.evek.api.type.UserRole;
@@ -91,8 +94,8 @@ public record User(
 	}
 
 	public static interface Operations {
-		User process(Command cmd, Reference<User> processingUser) throws Throwable;
-
+		User process(Command cmd, Reference<User> processingUser) 
+				throws GetListThrowable, IllegalProcessException, ProcessingException;		
 		List<User> getUser(Filter filter);
 
 		User getUser(Id<User> id);
