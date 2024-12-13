@@ -20,7 +20,7 @@ import de.ehealth.evek.api.util.Log;
 public interface IComServerReceiver extends IComReceiver {
 
 	default boolean receiveObject(Object input) 
-			throws EncryptionException, IllegalProcessException, ProcessingException, Exception {
+			throws EncryptionException, IllegalProcessException, ProcessingException {
 		if(!(input instanceof Serializable))
 			throw new IllegalArgumentException("Object is not a serializable!");
 		Serializable inputObject = (Serializable) input;
@@ -87,25 +87,25 @@ public interface IComServerReceiver extends IComReceiver {
 	}
 	
 	void process(Address.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	void process(Insurance.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	void process(InsuranceData.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 //	void process(Invoice.Command cmd) 
-//			throws IllegalProcessException, ProcessingException, Exception;
+//			throws IllegalProcessException, ProcessingException;
 	void process(Patient.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 //	void process(Protocol.Command cmd) 
-//			throws IllegalProcessException, ProcessingException, Exception;
+//			throws IllegalProcessException, ProcessingException;
 	void process(ServiceProvider.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	void process(TransportDetails.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	void process(TransportDocument.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	void process(User.Command cmd) 
-			throws IllegalProcessException, ProcessingException, Exception;
+			throws IllegalProcessException, ProcessingException;
 	
 	void process(ComEncryptionKey key) 
 			throws EncryptionException;
