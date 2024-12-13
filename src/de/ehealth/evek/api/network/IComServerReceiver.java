@@ -13,16 +13,16 @@ import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.exception.IllegalProcessException;
 import de.ehealth.evek.api.exception.ProcessingException;
-import de.ehealth.evek.api.exception.UserNotAllowedException;
 import de.ehealth.evek.api.exception.UserNotProvidedException;
 import de.ehealth.evek.api.util.Log;
 
 public interface IComServerReceiver extends IComReceiver {
-
+	
 	default boolean receiveObject(Object input) 
 			throws EncryptionException, IllegalProcessException, ProcessingException {
 		if(!(input instanceof Serializable))
-			throw new IllegalArgumentException("Object is not a serializable!");
+			throw new IllegalProcessException(
+					new IllegalArgumentException("Object is not a serializable!"));
 		Serializable inputObject = (Serializable) input;
 		inputObject = handleInputEncryption(inputObject);
 		
@@ -31,13 +31,8 @@ public interface IComServerReceiver extends IComReceiver {
 			return true;
 		}
 		
-		try {
-			if(customHandleInput(inputObject))
-				return true;
-		} catch (Exception e) {
-			Log.sendException(e);
-			throw new IllegalProcessException(e);
-		}
+		if(customHandleInput(inputObject))
+			return true;
 		
 		if(inputObject instanceof User.LoginUser) 
 			return setProcessingUser((User.LoginUser) inputObject);
@@ -74,14 +69,14 @@ public interface IComServerReceiver extends IComReceiver {
 		return true;	
 	}
 	
-	boolean setProcessingUser(User.LoginUser user);
+	boolean setProcessingUser(User.LoginUser user) throws ProcessingException;
 	
 	boolean hasProcessingUser();
 	
 	Serializable handleInputEncryption(Serializable inputObject) throws EncryptionException;
 	
 	default boolean customHandleInput(Serializable inputObject) 
-			throws UserNotProvidedException, UserNotAllowedException, IllegalArgumentException {
+			throws IllegalProcessException, ProcessingException {
 		Log.sendMessage(String.format("	Object of Type %s has been recieved!", inputObject.getClass()));
 		return false;
 	}
