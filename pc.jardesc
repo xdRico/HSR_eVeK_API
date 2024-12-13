@@ -13,6 +13,7 @@
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
         <file path="/HSR_eVeK_API/.classpath"/>
         <file path="/HSR_eVeK_API/.project"/>
+        <file path="/HSR_eVeK_API/LICENSE"/>
         <javaElement handleIdentifier="=HSR_eVeK_API/src"/>
     </selectedElements>
 </jardesc>
