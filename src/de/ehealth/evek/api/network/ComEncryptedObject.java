@@ -12,15 +12,33 @@ import javax.crypto.spec.SecretKeySpec;
 import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.util.Log;
 
+/**
+ * ComEncryptionObject
+ * <p>
+ * Class used for symmetrical encryption and transmission of objects and their asymmetrical encrypted key.
+ * 
+ * @implements Serializable
+ */
 public class ComEncryptedObject implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -2909115155234428410L;
 	
 	private final SealedObject sealedObject;
+	
 	private final String aesKey;
 	
+	/**
+	 * ComEncryptedObject
+	 * <p>
+	 * Class used for symmetrical encryption and transmission of objects and their asymmetrical encrypted key.
+	 * <p>
+	 * Constructor requires Cipher for the asymmetric encryption of the symmetrical key and the object to symmetricaly encrypt
+	 * 
+	 * @param rsaEncryptionCipher - the Cipher used for the asymmetric encryption of the key
+	 * @param object - the object to encrypt symmetricaly
+	 * 
+	 * @throws EncryptionException - thrown when the encryption process fails
+	 */
 	ComEncryptedObject(Cipher rsaEncryptionCipher, Serializable object) throws EncryptionException {
 		try {
 			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
@@ -44,6 +62,17 @@ public class ComEncryptedObject implements Serializable {
 
 	}
 	
+	/**
+	 * method decryptObject
+	 * <p>
+	 * Method to get the decrypted Object when provided with the fitting Cipher
+	 * 
+	 * @param rsaDecryptionCipher - the decryption cipher for the asymmetrical encryption
+	 * 
+	 * @return Serializable - the Object that was transmitted and encrypted
+	 * 
+	 * @throws EncryptionException - thrown when the decryption process fails
+	 */
 	Serializable decryptObject(Cipher rsaDecryptionCipher) throws EncryptionException {
 
 		if(rsaDecryptionCipher == null)

@@ -1,5 +1,10 @@
 package de.ehealth.evek.api.type;
 
+/**
+ * enum TransportReason
+ * <p>
+ * Enum for defining the reason of a transport
+ */
 public enum TransportReason {
 	EmergencyTransport, 
 	FullPartStationary, 

@@ -1,23 +1,52 @@
 package de.ehealth.evek.api.exception;
 
-public class WrongCredentialsException extends Exception {
+/**
+ * WrongCredentialsException
+ * <p>
+ * Exception class thrown, when a user is tried to be logged in, but the credentials don't match an user.
+ * 
+ * @extends IllegalProcessException
+ */
+public class WrongCredentialsException extends IllegalProcessException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -759410424357382732L;
-
-	private Exception cause = null;
 	
+	/**
+	 * WrongCredentialsException
+	 * <p>
+	 * To throw, when a user is tried to be created, but the username is already used. 
+	 * <p>
+	 * Constructor requiring the Id of the user that was tried to be created.
+	 * 
+	 * @param user - Id of the user that was already used
+	 */
 	public WrongCredentialsException() {
 	}
 	
-	public WrongCredentialsException(Exception cause) {
-		this.cause = cause;
+	/**
+	 * WrongCredentialsException
+	 * <p>
+	 * To throw, when a user is tried to be created, but the username is already used. 
+	 * <p>
+	 * Constructor requiring the throwable that was causing this exception.
+	 * 
+	 * @param cause - throwable that was originally thrown
+	 */
+	public WrongCredentialsException(Throwable cause) {
+		super(cause);
 	}
 	
-	public Exception getCause(){
-		return cause;
+	/**
+	 * WrongCredentialsException
+	 * <p>
+	 * To throw, when a user is tried to be created, but the username is already used. 
+	 * <p>
+	 * Constructor requiring additional information.
+	 * 
+	 * @param info - addional information about exception or cause
+	 */
+	public WrongCredentialsException(String info) {
+		super(info);
 	}
 	
 	@Override

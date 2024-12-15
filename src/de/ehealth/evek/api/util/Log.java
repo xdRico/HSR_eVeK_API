@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Log {
 
 	private static String folder;
+	
 	private static PrintWriter file;
 
 	private static boolean writeToFile = false;

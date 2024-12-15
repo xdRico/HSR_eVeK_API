@@ -64,8 +64,9 @@ public class Debug {
 	 */
 	private static void sendMessage(String prefix, String message) {
 
-		if (isDebug())
-			System.out.println(prefix + message + "\n");
+		if (!isDebug()) return;
+		
+		System.out.println(prefix + message + "\n");
 	}
 
 	/**
@@ -75,12 +76,11 @@ public class Debug {
 	 */
 	public static void sendException(Throwable e) {
 
-		if (isDebug()) {
-			System.err.println("[E]" + Log.logPrefix() + e.getCause() + " in " + e.getClass() + ": "
-					+ e.getLocalizedMessage() + "\n");
-			for (StackTraceElement el : e.getStackTrace())
-				System.err.println(el.toString());
-
-		}
+		if (!isDebug()) return;
+		
+		System.err.println("[E]" + Log.logPrefix() + e.getCause() + " in " + e.getClass() + ": "
+				+ e.getLocalizedMessage() + "\n");
+		for (StackTraceElement el : e.getStackTrace())
+			System.err.println(el.toString());
 	}
 }

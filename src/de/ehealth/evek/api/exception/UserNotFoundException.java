@@ -3,31 +3,56 @@ package de.ehealth.evek.api.exception;
 import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.type.Id;
 
-public class UserNotFoundException extends IllegalAccessException  {
+/**
+ * UserNotFoundException
+ * <p>
+ * Exception class thrown, when a user is tried ro access, but the username is not existing.
+ * 
+ * @extends IllegalProcessException
+ */
+public class UserNotFoundException extends IllegalProcessException  {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8275336912813657500L;
 
-	private final Id<User> user;
-	private String message;
+	private final Id<User> userName;
 	
-	public UserNotFoundException(Id<User> user) {
-		this(String.format("User %s could not be found!", 
-				user.value().toString()), user);
+	/**
+	 * UserNotFoundException
+	 * <p>
+	 * To throw, when a user is tried ro access, but the username is not existing.
+	 * <p>
+	 * Constructor requiring the Id of the user that was tried to be accessed.
+	 * 
+	 * @param userName - Id of the user that is not existing
+	 */
+	public UserNotFoundException(Id<User> userName) {
+		this(userName, String.format("User %s could not be found!", 
+						userName.value().toString()));
 	}
 	
-	public UserNotFoundException(String message, Id<User> user) {
-		this.user = user;
-		this.message = message;
-	}
-
-	public String message() {
-			return message;
+	/**
+	 * UserNotFoundException
+	 * <p>
+	 * To throw, when a user is tried ro access, but the username is not existing.
+	 * <p>
+	 * Constructor requiring the Id of the user that was tried to be accessed and additional information.
+	 * 
+	 * @param info - additional information about exception or cause
+	 * @param userName - Id of the user that is not existing
+	 */
+	public UserNotFoundException(Id<User> userName, String info) {
+		super(info);
+		this.userName = userName;
 	}
 	
-	public Id<User> getProcessingUser(){
-		return user;
+	/**
+	 * method getUserID
+	 * <p>
+	 * Method to get the user-id, that was not existing
+	 * 
+	 * @return Id<User> - Id of the user that was is existing
+	 */
+	public Id<User> getUserID(){
+		return userName;
 	}
 }

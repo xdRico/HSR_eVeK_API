@@ -12,31 +12,116 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
+/**
+ * interface IComServerSender
+ * <p>
+ * Interface for sending objects on Server side.
+ * 
+ * @extends IComSender
+ */
 public interface IComServerSender extends IComSender {
 	
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(Address object) throws IOException;
 	
-	void send(Address cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(Insurance object) throws IOException;
 	
-	void send(Insurance cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(InsuranceData object) throws IOException;
 	
-	void send(InsuranceData cmd) throws IOException;
+//	void send(Invoice object) throws IOException;
 	
-//	void send(Invoice cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(Patient object) throws IOException;
 	
-	void send(Patient cmd) throws IOException;
+//	void send(Protocol object) throws IOException;
 	
-//	void send(Protocol cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(ServiceProvider object) throws IOException;
 	
-	void send(ServiceProvider cmd) throws IOException;
-	
-	void send(TransportDetails cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(TransportDetails object) throws IOException;
 
-	void send(TransportDocument cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(TransportDocument object) throws IOException;
 
-	void send(User cmd) throws IOException;
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
+	void send(User object) throws IOException;
 
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
 	void send(Throwable e) throws IOException;
 	
+	/**
+	 * method send
+	 * <p>
+	 * Method called to send an object.
+	 * 
+	 * @param object - the object to send
+	 * @throws IOException - when an error occurs on transmission
+	 */
 	void send(ArrayList<?> list) throws IOException;
-
 }

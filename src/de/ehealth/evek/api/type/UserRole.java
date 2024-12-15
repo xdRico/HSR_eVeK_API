@@ -13,8 +13,13 @@ import de.ehealth.evek.api.entity.TransportDetails;
 import de.ehealth.evek.api.entity.TransportDocument;
 import de.ehealth.evek.api.entity.User;
 
+/**
+ * enum UserRole
+ * <p>
+ * Enum for defining the user roles and their permissions
+ */
 public enum UserRole implements Serializable {
-	HealthcareAdmin(new Object[] {
+	HealthcareAdmin(new Class[] {
 			Address.Update.class,
 			ServiceProvider.CreateFull.class,
 			ServiceProvider.Move.class,
@@ -23,7 +28,7 @@ public enum UserRole implements Serializable {
 			User.Delete.class,
 			User.UpdateRole.class
 	}),
-	HealthcareDoctor(new Object[] {
+	HealthcareDoctor(new Class[] {
 			Insurance.Create.class,
 			Insurance.Update.class,
 			Insurance.Move.class,
@@ -34,7 +39,7 @@ public enum UserRole implements Serializable {
 			TransportDocument.Delete.class,
 			TransportDocument.Update.class
 	}),
-	HealthcareUser(new Object[] {
+	HealthcareUser(new Class[] {
 			Insurance.Create.class,
 			Insurance.Update.class,
 			Insurance.Move.class,
@@ -45,7 +50,7 @@ public enum UserRole implements Serializable {
 			TransportDocument.Delete.class,
 			TransportDocument.Update.class
 	}),
-	TransportAdmin(new Object[] {
+	TransportAdmin(new Class[] {
 			Address.Update.class,
 			ServiceProvider.Move.class,
 			ServiceProvider.Update.class,
@@ -53,7 +58,7 @@ public enum UserRole implements Serializable {
 			User.Delete.class,
 			User.UpdateRole.class
 	}),
-	TransportDoctor(new Object[] {
+	TransportDoctor(new Class[] {
 			Insurance.Create.class,
 			Insurance.Update.class,
 			Insurance.Move.class,
@@ -69,21 +74,21 @@ public enum UserRole implements Serializable {
 			TransportDocument.Delete.class,
 			TransportDocument.Update.class
 	}),
-	TransportInvoice(new Object[] {
+	TransportInvoice(new Class[] {
 			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,
 			TransportDetails.UpdatePatientSignature.class,
 			TransportDetails.UpdateTransporterSignature.class
 	}),
-	TransportUser(new Object[] {
+	TransportUser(new Class[] {
 			TransportDetails.AssignTransportProvider.class,
 			TransportDetails.Delete.class,
 			TransportDetails.Update.class,
 			TransportDetails.UpdatePatientSignature.class,
 			TransportDetails.UpdateTransporterSignature.class
 	}),
-	InsuranceAdmin(new Object[] {
+	InsuranceAdmin(new Class[] {
 			Address.Update.class,
 			Insurance.Update.class,
 			Insurance.Move.class,
@@ -91,7 +96,7 @@ public enum UserRole implements Serializable {
 			User.Delete.class,
 			User.UpdateRole.class
 	}),
-	InsuranceUser(new Object[] {
+	InsuranceUser(new Class[] {
 			InsuranceData.Create.class,
 			Patient.Create.class,
 			Patient.CreateWithInsuranceData.class,
@@ -100,7 +105,7 @@ public enum UserRole implements Serializable {
 			TransportDocument.Archive.class
 			
 	}),
-	SuperUser(new Object[] {
+	SuperUser(new Class[] {
 			Address.Update.class,
 			Address.Delete.class,
 			Insurance.Create.class,
@@ -138,11 +143,19 @@ public enum UserRole implements Serializable {
 	
 	private static final long serialVersionUID = -6591375785628765586L;
 
+	private List<Class<?>> allowedCommands = new ArrayList<>();
 	
-	private List<Object> allowedCommands = new ArrayList<>();
-	
-	private UserRole(Object[] commands) {
-		for(Object o : commands)
+	/**
+	 * UserRole
+	 * <p>
+	 * Enum for defining the user roles and their permissions.
+	 * <p>
+	 * Constructor requiring a list of commands to be allowed to.
+	 * 
+	 * @param commands - commands the users of this role are allowed to process
+	 */
+	private UserRole(Class<?>[] commands) {
+		for(Class<?> o : commands)
 			allowedCommands.add(o);
 		allowedCommands.add(Address.Create.class);
 		allowedCommands.add(Address.GetList.class);
@@ -168,7 +181,14 @@ public enum UserRole implements Serializable {
 		allowedCommands.add(User.UpdateCredentials.class);
 	}
 	
-	public List<?> getAllowedActions(){
+	/**
+	 * method getAllowedActions
+	 * <p>
+	 * Method to gget the commands the role is allowed to process.
+	 * 
+	 * @return List<Class<?>> - the list of commands the users of this role is allowed to process
+	 */
+	public List<Class<?>> getAllowedActions(){
 		return allowedCommands;
 	}
 }
