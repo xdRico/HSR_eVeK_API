@@ -11,8 +11,14 @@ import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
 
 import de.ehealth.evek.api.exception.EncryptionException;
+import de.ehealth.evek.api.exception.IllegalProcessException;
 import de.ehealth.evek.api.util.Log;
 
+/**
+ * ComEncryption
+ * <p>
+ * Class used for the encryption handling of the IComSender and IComReceiver.
+ */
 public class ComEncryption {
 	
 	private boolean useEncryption = false;
@@ -21,14 +27,29 @@ public class ComEncryption {
 	private Cipher encryptionCipher;
 	
 	private boolean isServer;
+	
 	private IComSender sender;
+	
 	private IComClientReceiver receiver;
 	
 	
 	@SuppressWarnings("exports")
-	public ComEncryption(IComReceiver receiver, IComSender sender) throws IllegalArgumentException{
+	/**
+	 * ComEncryption
+	 * <p>
+	 * Used for the encryption handling of the IComSender and IComReceiver.
+	 * <p>
+	 * Constructor requiring the IComReceiver and IComSender of the connection.
+	 * 
+	 * @param receiver - the IComReceiver to use for receiving
+	 * @param sender - the IComSender to use for sending
+	 * 
+	 * @throws IllegalProcessException - thrown, when either a sender or receiver is null or sender and receiver are not the same type (Server / Client)
+	 */
+	public ComEncryption(IComReceiver receiver, IComSender sender) throws IllegalProcessException {
 		if(receiver == null || sender == null)
-			throw new IllegalArgumentException("IComServerReceiver and IComServerSender shall not be null!");
+			throw new IllegalProcessException(
+					new IllegalArgumentException("IComServerReceiver and IComServerSender shall not be null!"));
 		if(receiver instanceof IComClientReceiver 
 				&& sender instanceof IComClientSender) {
 			isServer = false;
@@ -37,12 +58,21 @@ public class ComEncryption {
 		else if(receiver instanceof IComServerReceiver 
 				&& sender instanceof IComServerSender)
 			isServer = true;
-		else throw new IllegalArgumentException("IComReceiver and IComSender have to be of the same type (Server or Client)!");
+		else throw new IllegalProcessException(
+				new IllegalArgumentException("IComReceiver and IComSender have to be of the same type (Server or Client)!"));
 		
 		this.sender = sender;
 	}
 	
-	//ClientOnly
+	/**
+	 * !CLIENT ONLY!
+	 * <p>
+	 * method useEncryption
+	 * <p>
+	 * Method to initialize and activate encryption of the connection
+	 * 
+	 * @throws EncryptionException - thrown when initializing of the encryption fails
+	 */
 	public void useEncryption() throws EncryptionException {
 		try {
 			useEncryption(getCipherRSAInstance());
@@ -53,7 +83,18 @@ public class ComEncryption {
 		}
 	}
 	
-	//ClientOnly
+	/**
+	 * !CLIENT ONLY!
+	 * <p>
+	 * method useEncryption
+	 * <p>
+	 * Method to initialize and activate encryption of the connection.
+	 * 
+	 * @param algorithm - the algorithm to use for the encryption (i.E. "RSA/ECB/OAEPWithSHA-256AndMGF1Padding")
+	 * 
+	 * @throws EncryptionException - thrown when initializing of the encryption fails
+	 * @throws NoSuchAlgorithmException - thrown when the provided Algorithm is not valid
+	 */
 	private void useEncryption(String algorithm) throws EncryptionException, NoSuchAlgorithmException {
 		try {
 			if(isServer)
@@ -84,7 +125,17 @@ public class ComEncryption {
 		}
 	}
 
-	//ServerOnly
+	/**
+	 * !SERVER ONLY!
+	 * <p>
+	 * method useEncryption
+	 * <p>
+	 * Method to initialize and activate encryption of the connection.
+	 * 
+	 * @param serverPublicKey - Public Key of the client that got received
+	 * 
+	 * @throws EncryptionException - thrown when initializing of the encryption fails
+	 */
 	public void useEncryption(ComEncryptionKey serverPublicKey) throws EncryptionException {
 		try {
 			useEncryption(serverPublicKey, getCipherRSAInstance());
@@ -95,11 +146,22 @@ public class ComEncryption {
 		}
 	}
 	
-	//ServerOnly
+	/**
+	 * !SERVER ONLY!
+	 * <p>
+	 * method useEncryption
+	 * <p>
+	 * Method to initialize and activate encryption of the connection.
+	 * 
+	 * @param serverPublicKey - Public Key of the client that got received
+	 * @param algorithm - the algorithm to use for the encryption (i.E. "RSA/ECB/OAEPWithSHA-256AndMGF1Padding")
+	 * 
+	 * @throws EncryptionException - thrown when initializing of the encryption fails
+	 * @throws NoSuchAlgorithmException - thrown when the provided Algorithm is not valid
+	 */
 	private void useEncryption(ComEncryptionKey serverPublicKey, String algorithm) throws EncryptionException, NoSuchAlgorithmException {
 		try {
 			if(!isServer)
-				//throw new EncryptionException("This method is explicitly for Servers! Use useEncryption([String algorithm]) instead!");
 				throw new EncryptionException("This method is explicitly for Servers! Use useEncryption() instead!");
 
 			encryptionCipher = Cipher.getInstance(algorithm);
@@ -125,6 +187,17 @@ public class ComEncryption {
 		}
 	}
 	
+	/**
+	 * method getObject
+	 * <p>
+	 * Method to get the received Object as decrypted object.
+	 * 
+	 * @param inputObject - the received object
+	 * 
+	 * @return Serializable - the received, decrypted object
+	 * 
+	 * @throws EncryptionException - thrown when decryption of the object fails
+	 */
 	public Serializable getObject(Serializable inputObject) throws EncryptionException {
 		if(!(inputObject instanceof ComEncryptedObject)
 				|| !useEncryption)
@@ -132,10 +205,30 @@ public class ComEncryption {
 		return ((ComEncryptedObject)inputObject).decryptObject(getDecryptionCipher());
 	}
 	
+	/**
+	 * method encryptObject
+	 * <p>
+	 * Method to encrypt the given serializable object to a ComEncryptedObject
+	 * 
+	 * @param object - the object to be encrypted
+	 * 
+	 * @return ComEncryptedObject - the as ComEncryptedObject encrypted object
+	 * 
+	 * @throws EncryptionException - thrown when encryption of the object fails
+	 */
 	public ComEncryptedObject encryptObject(Serializable object) throws EncryptionException {
 		return new ComEncryptedObject(getEncryptionCipher(), object);
 	}
 	
+	/**
+	 * method getDecryptionCipher
+	 * <p>
+	 * Method to get the decryption Cipher
+	 * 
+	 * @return Cipher - the Cipher instance used for decryption
+	 * 
+	 * @throws EncryptionException - thrown when Cipher us null or encryption not in usage
+	 */
 	private Cipher getDecryptionCipher() throws EncryptionException {
 		if(decryptionCipher == null)
 			throw new EncryptionException("Cipher not yet set up!");
@@ -144,6 +237,15 @@ public class ComEncryption {
 		return decryptionCipher;
 	}
 	
+	/**
+	 * method getEncryptionCipher
+	 * <p>
+	 * Method to get the encryption Cipher
+	 * 
+	 * @return Cipher - the Cipher instance used for encryption
+	 * 
+	 * @throws EncryptionException - thrown when Cipher us null or encryption not in usage
+	 */
 	private Cipher getEncryptionCipher() throws EncryptionException {
 		if(encryptionCipher == null)
 			throw new EncryptionException("Cipher not yet set up!");
@@ -152,15 +254,36 @@ public class ComEncryption {
 		return encryptionCipher;
 	}
 	
+	/**
+	 * method getCipherRSAInstance
+	 * <p>
+	 * Method to get the currently used Cipher instance
+	 * 
+	 * @return String - the current Cipher instance
+	 */
 	private static String getCipherRSAInstance() {
 		//TODO create custom Cipher Instances
 		return defaultCipherRSAInstance();
 	}
 	
+	/**
+	 * method defaultCipherRSAInstance
+	 * <p>
+	 * Method to get the default Cipher instance with RSA encryption
+	 * 
+	 * @return String - the default Cipher instance
+	 */
 	private static String defaultCipherRSAInstance() {
 		return "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
 	}
 	
+	/**
+	 * method defaultOAEPParams
+	 * <p>
+	 * Method to get the default OAEP Parameters for encryption
+	 * 
+	 * @return OAEPParameterSpec - the default OAEP Parameters
+	 */
 	private static OAEPParameterSpec defaultOAEPParams() {
 		return new OAEPParameterSpec(
 			    "SHA-256",                      // Hash-Algorithmus

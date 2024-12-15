@@ -6,20 +6,36 @@ import java.io.Serializable;
 import java.net.Socket;
 
 import de.ehealth.evek.api.exception.EncryptionException;
+import de.ehealth.evek.api.exception.IllegalProcessException;
 import de.ehealth.evek.api.util.Log;
 
+/**
+ * ComSender
+ * <p>
+ * Standard implementation of IComSender.
+ * <p>
+ * For Output of e-VeK objects.
+ * 
+ * @implements IComSender
+ */
 public class ComSender implements IComSender {
-
-	protected ObjectOutputStream objSender;
+	
 	protected ComEncryption encryption;
 	
+	protected ObjectOutputStream objSender;
+	
+	/**
+	 * ComSender
+	 * <p>
+	 * Creating OutputStream for sending objects.
+	 * Constructor requiring Socket for its stream.
+	 * 
+	 * @param server - Socket with the server connection
+	 * 
+	 * @throws IOException - Exception thrown, when ObjectOutputStream cannot be created
+	 */
 	protected ComSender(Socket socket) throws IOException {
-		try {
-			this.objSender = new ObjectOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			Log.sendException(e);
-			throw e;
-		}
+		this.objSender = new ObjectOutputStream(socket.getOutputStream());
 	}
 
 	@Override
@@ -41,12 +57,15 @@ public class ComSender implements IComSender {
 		
 	}
 
-	@SuppressWarnings("exports")
 	@Override
-	public ComEncryption useEncryption(IComReceiver receiver) throws EncryptionException {
-		this.encryption = new ComEncryption(receiver, this);
-		this.encryption.useEncryption();
-		return encryption;
+	public ComEncryption useEncryption(@SuppressWarnings("exports") IComReceiver receiver) throws EncryptionException {
+		try {
+			this.encryption = new ComEncryption(receiver, this);
+			this.encryption.useEncryption();
+			return encryption;
+		}catch(IllegalProcessException e) {
+			throw new EncryptionException(e);
+		}
 	}
 
 }

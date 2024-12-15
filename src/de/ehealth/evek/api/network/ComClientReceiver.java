@@ -19,14 +19,74 @@ import de.ehealth.evek.api.entity.User;
 import de.ehealth.evek.api.exception.EncryptionException;
 import de.ehealth.evek.api.exception.WrongObjectTypeException;
 
+/**
+ * ComClientReceiver
+ * <p>
+ * Standard implementation of IComClientReceiver.
+ * <p>
+ * For Client sided Input of e-VeK objects.
+ * 
+ * @implements IComClientReceiver
+ */
 public class ComClientReceiver implements IComClientReceiver{
 
 	private final ObjectInputStream objReader;
+	
 	private Cipher decryptionCipher;
 	
+	/**
+	 * ComClientReceiver
+	 * <p>
+	 * Creating InputStream for receiving objects.
+	 * Constructor requiring Socket for its stream.
+	 * 
+	 * @param server - Socket with the server connection
+	 * 
+	 * @throws IOException - Exception thrown, when ObjectInputStream cannot be created
+	 */
 	public ComClientReceiver(Socket server) throws IOException {
 		objReader = new ObjectInputStream(server.getInputStream());
 	}
+	
+	/**
+	 * private method wrongObjectType
+	 * <p>
+	 * Method for getting thrown Exceptions from the server or else throw a WrongObjectTypeException
+	 * 
+	 * @param expectedType - object type that was expected to be received
+	 * @param receivedObject - Object that was received
+	 * 
+	 * @return Exception - the Exception thrown by the server or else WrongObjectTypeException
+	 */
+	private static Exception wrongObjectType(Type expectedType, Object receivedObject) {
+		if(receivedObject instanceof Exception)
+			return (Exception) receivedObject;
+		return new WrongObjectTypeException(expectedType, receivedObject);
+	}
+	
+	/**
+	 * private method readObject
+	 * <p>
+	 * Method for reading an object from the input and returning it or throwing an exception.
+	 * 
+	 * @return Object - the received Object
+	 * 
+	 * @throws IOException - when decryption or connection failed 
+	 */
+	private Object readObject() throws IOException {
+		Object object;
+		try {
+			object = objReader.readObject();
+			if(!(object instanceof ComEncryptedObject))
+				return object;
+			if(decryptionCipher == null)
+				throw new EncryptionException("Cipher not found!");
+			return ((ComEncryptedObject) object).decryptObject(decryptionCipher);
+		} catch (ClassNotFoundException e) {
+			throw new IOException(e); 
+		}
+	}
+	
 	
 	@Override
 	public Address receiveAddress() throws Exception {
@@ -120,27 +180,6 @@ public class ComClientReceiver implements IComClientReceiver{
 		if(object instanceof List<?>) 
 			return (List<?>) object;
 		throw wrongObjectType(List.class, object);
-	}
-	
-	private static Exception wrongObjectType(Type expected, Object received) {
-		if(received instanceof Exception)
-			return (Exception) received;
-		return new WrongObjectTypeException(expected, received);
-	}
-	
-	private Object readObject() throws IOException {
-		Object object;
-		try {
-			object = objReader.readObject();
-			if(!(object instanceof ComEncryptedObject))
-				return object;
-			if(decryptionCipher == null)
-				throw new EncryptionException("Cipher not found!");
-			return ((ComEncryptedObject) object).decryptObject(decryptionCipher);
-		} catch (EncryptionException | ClassNotFoundException e) {
-			throw new IOException(e); 
-		}
-		
 	}
 	
 	@Override
