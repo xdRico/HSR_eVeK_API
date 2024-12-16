@@ -1,0 +1,6 @@
+module:evek.api
+de.ehealth.evek.api.entity
+de.ehealth.evek.api.exception
+de.ehealth.evek.api.network
+de.ehealth.evek.api.type
+de.ehealth.evek.api.util
