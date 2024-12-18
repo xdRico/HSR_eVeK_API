@@ -8,12 +8,4 @@ package de.ehealth.evek.api.type;
 public enum PatientCondition {
 	CarryingChair, WheelChair, LyingDown;
 	
-	@Override
-	public String toString() {
-		return switch(this) {
-		case CarryingChair -> "Tragestuhl";
-		case WheelChair -> "Rollstuhl";
-		case LyingDown -> "liegend";
-		};
-	}
 }
