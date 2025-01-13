@@ -33,7 +33,7 @@ public record Reference<T>(Id<T> id) implements Serializable{
 	 */
 	public static <T> Reference<T> to(Id<?> id){
 		return new Reference<>(new Id<>(id.value()));
-	}
+
 	
 	@Override
 	public String toString() {
