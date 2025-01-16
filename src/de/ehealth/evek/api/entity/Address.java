@@ -116,7 +116,8 @@ public record Address(
 	 * @property COptional:Name
 	 */
 	public static record Filter(COptional<String> streetName, 
-			COptional<String> postCode, COptional<String> city, COptional<String> name) {
+			COptional<String> postCode, COptional<String> city, COptional<String> name)
+	implements Serializable {
 	}
 
 	/**

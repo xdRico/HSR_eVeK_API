@@ -117,7 +117,7 @@ public record Insurance(
 	 * @property COptional:Name
 	 */
 	public static record Filter(COptional<Reference<Address>> address, 
-			COptional<String> name) {
+			COptional<String> name) implements Serializable {
 	}
 
 	/**

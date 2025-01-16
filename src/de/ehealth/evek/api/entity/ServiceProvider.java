@@ -167,7 +167,7 @@ public record ServiceProvider(
 	 * @property COptional:Name
 	 */
 	public static record Filter(COptional<Reference<Address>> address, 
-			COptional<String> type, COptional<String> name) {
+			COptional<String> type, COptional<String> name) implements Serializable {
 	}
 
 	/**

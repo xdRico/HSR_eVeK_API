@@ -181,7 +181,7 @@ public record Patient (
 	public static record Filter(COptional<Reference<Address>> address, 
 			COptional<String> lastName, COptional<String> firstName, 
 			COptional<Date> birthDate, 
-			COptional<Reference<InsuranceData>> insuranceData) {
+			COptional<Reference<InsuranceData>> insuranceData) implements Serializable {
 	}
 
 	/**

@@ -97,7 +97,7 @@ public record InsuranceData(
 	 */
 	public static record Filter(
 			COptional<Reference<Patient>> patient,
-			COptional<Reference<Insurance>> insurance) {
+			COptional<Reference<Insurance>> insurance) implements Serializable {
 	}
 	
 	/**

@@ -205,7 +205,7 @@ public record TransportDocument(
 			COptional<Date> startDate, COptional<Date> endDate,
 			COptional<Reference<ServiceProvider>> healthcareServiceProvider,
 			COptional<TransportationType> transportationType,
-			COptional<Reference<User>> signature) {
+			COptional<Reference<User>> signature) implements Serializable {
 	}
 	
 	/**

@@ -204,7 +204,8 @@ public record User(
 	 */
 	public static record Filter(COptional<String> lastName, COptional<String> firstName, 
 			COptional<Reference<Address>> address,
-			COptional<Reference<ServiceProvider>> serviceProvider, COptional<UserRole> role) {
+			COptional<Reference<ServiceProvider>> serviceProvider, COptional<UserRole> role)
+	implements Serializable {
 	}
 
 	/**

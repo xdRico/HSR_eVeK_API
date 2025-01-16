@@ -205,7 +205,7 @@ public record TransportDetails (
 			COptional<Date> transportDate, 
 			COptional<Reference<Address>> address,
 			COptional<Direction> direction,
-			COptional<Reference<ServiceProvider>> transportProvider) {
+			COptional<Reference<ServiceProvider>> transportProvider) implements Serializable {
 	}
 
 	/**
