@@ -2,6 +2,7 @@ package de.ehealth.evek.api.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 import de.ehealth.evek.api.exception.GetListThrowable;
 import de.ehealth.evek.api.exception.IllegalProcessException;
@@ -66,7 +67,8 @@ public record TransportDetails (
    	 * @permits GetList
    	 */
 	public static sealed interface Command extends Serializable permits 
-	AssignTransportProvider, Create, Delete, Update, UpdatePatientSignature, UpdateTransporterSignature, Get, GetList{
+	AssignTransportProvider, Create, Delete, Update, UpdatePatientSignature, 
+	UpdateTransporterSignature, Get, GetList, GetListByIDList {
 	}
 	
 	/**
@@ -175,6 +177,16 @@ public record TransportDetails (
 	 * @property Filter
 	 */
 	public static record GetList(Filter filter) implements Command {
+	}
+	
+	/**
+	 * record GetList
+	 * <p>
+	 * Command to get a List of transport details by a provided {@link List} of {@link Id Id's}.
+	 * 
+	 * @property {@link List}
+	 */
+	public static record GetListByIDList(List<Id<TransportDetails>> idList) implements Command{
 	}
 	
 	/**

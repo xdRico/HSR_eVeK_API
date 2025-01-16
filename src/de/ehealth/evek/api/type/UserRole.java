@@ -168,12 +168,12 @@ public enum UserRole implements Serializable {
 		allowedCommands.add(Patient.Get.class);
 		allowedCommands.add(ServiceProvider.GetList.class);
 		allowedCommands.add(ServiceProvider.Get.class);
-		allowedCommands.add(TransportDetails.GetList.class);
 		allowedCommands.add(TransportDetails.Get.class);
-		allowedCommands.add(TransportDocument.GetList.class);
+		allowedCommands.add(TransportDetails.GetList.class);
+		allowedCommands.add(TransportDetails.GetListByIDList.class);
 		allowedCommands.add(TransportDocument.Get.class);
 		allowedCommands.add(TransportDocument.GetList.class);
-		allowedCommands.add(TransportDocument.Get.class);
+		allowedCommands.add(TransportDocument.GetListByIDList.class);
 		allowedCommands.add(User.GetList.class);
 		allowedCommands.add(User.Get.class);
 		allowedCommands.add(User.LoginUser.class);
