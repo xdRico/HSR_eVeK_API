@@ -42,7 +42,11 @@ public interface IComServerReceiver extends IComReceiver {
 			throw new IllegalProcessException(
 					new IllegalArgumentException("Object is not a serializable!"));
 		Serializable inputObject = (Serializable) input;
+		
 		inputObject = handleInputEncryption(inputObject);
+		
+		if(inputObject instanceof ConnectionTest)
+			return true;
 		
 		if(inputObject instanceof ComEncryptionKey) {
 			process((ComEncryptionKey) inputObject);

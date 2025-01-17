@@ -47,4 +47,20 @@ interface IComSender {
 	 * @throws EncryptionException - when an error occurs on initializing encryption
 	 */
 	ComEncryption useEncryption(IComReceiver receiver) throws EncryptionException;
+	
+	/**
+	 * method testConnection
+	 * 
+	 * Method to send a test package to the server to ensure it is still connected.
+	 * 
+	 * @return boolean - if the connection is still established
+	 */
+	default boolean testConnection() {
+		try {
+			sendAsObject(new ConnectionTest());
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 }
