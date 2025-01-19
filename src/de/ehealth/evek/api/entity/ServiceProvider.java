@@ -164,10 +164,13 @@ public record ServiceProvider(
 	 * 
 	 * @property COptional:Address
 	 * @property COptional:Type
+	 * @property COptional:Boolean
+	 * @property COptional:Boolean
 	 * @property COptional:Name
 	 */
 	public static record Filter(COptional<Reference<Address>> address, 
-			COptional<String> type, COptional<String> name) implements Serializable {
+			COptional<String> type, COptional<Boolean> isHealthcareProvider,
+			COptional<Boolean> isTransportProvider, COptional<String> name) implements Serializable {
 	}
 
 	/**
